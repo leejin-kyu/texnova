@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TexNova 무료 특강 - 텍스트마이닝·빅데이터 분석 기초부터 실습까지</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-light: #67e8f9;
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .backdrop-glass {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .card-luxury {
+            background: linear-gradient(145deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 26, 0.95));
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .card-luxury:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .section-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-accent {
+            color: var(--accent);
+        }
+
+        .text-primary-color {
+            color: var(--primary-light);
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .hero-bg {
+            background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at bottom right, rgba(34, 211, 238, 0.1) 0%, transparent 50%);
+        }
+
+        .floating-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 16px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 -4px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: var(--bg-dark);
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-light);
+            color: var(--primary-light);
+            padding: 12px 28px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            color: var(--bg-dark);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .curriculum-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .benefit-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: var(--bg-dark);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(34, 211, 238, 0.1));
+            border-left: 4px solid var(--accent);
+            padding: 24px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-light);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 80px 0;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .process-step {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .process-arrow {
+            color: var(--accent);
+            font-size: 24px;
+        }
+
+        .analysis-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .floating-banner {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px 16px;
+            }
+
+            .process-flow {
+                flex-direction: column;
+            }
+
+            .process-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center px-4 py-20">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="mb-6">
+                <span class="free-badge mb-2 inline-block">100% 무료 특강</span>
+            </div>
+            <div class="mb-8">
+                <span class="tag mb-4 inline-block">TexNova × 빅데이터 분석 연구</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                텍스트마이닝·빅데이터 분석<br>
+                <span class="gradient-text">이론부터 실습까지, 무료로</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8">
+                AI 기반 분석 플랫폼 <span class="text-accent font-bold">TexNova</span>와 함께<br>
+                텍스트마이닝 기초 이론과 실습을 한 번에 배우세요
+            </p>
+            <div class="backdrop-glass rounded-2xl p-8 mb-10 max-w-3xl mx-auto">
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div>
+                        <div class="text-3xl font-bold text-accent mb-2">무료</div>
+                        <div class="text-gray-400">수강료</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-accent mb-2">TexNova</div>
+                        <div class="text-gray-400">무료 이용권 제공</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-accent mb-2">이론+실습</div>
+                        <div class="text-gray-400">완벽 커리큘럼</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#apply" class="btn-cta text-lg py-4 px-10">무료 강의 신청하기</a>
+                <a href="#curriculum" class="btn-outline">커리큘럼 보기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 이런 분들께 추천 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Who is it for</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    이런 분들께 <span class="gradient-text">추천</span>합니다
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">01</div>
+                    <p class="text-lg">정책·동향 분석, SNS, 설문지 등<br><span class="text-gray-400">텍스트 데이터를 분석하고 싶은 분</span></p>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">02</div>
+                    <p class="text-lg">텍스트마이닝에 관심은 있지만<br><span class="text-gray-400">이론과 코딩이 부담스러운 분</span></p>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">03</div>
+                    <p class="text-lg">연구보고서, 논문에 빅데이터 분석을<br><span class="text-gray-400">활용하고 싶은 연구자</span></p>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">04</div>
+                    <p class="text-lg">AI 도구를 활용한 데이터 분석을<br><span class="text-gray-400">직접 경험해보고 싶은 분</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- 강의 특징 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">What You Get</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    무료 강의 신청 시 <span class="gradient-text">모두 제공</span>됩니다
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="backdrop-glass rounded-2xl p-8">
+                    <div class="benefit-badge mb-6">혜택 1</div>
+                    <h3 class="text-2xl font-bold mb-4">TexNova 무료 이용권</h3>
+                    <p class="text-gray-300 mb-4">
+                        강의 수강생에게 <span class="text-accent font-semibold">TexNova 플랫폼을 무료로</span> 제공합니다.
+                        강의에서 배운 내용을 직접 실습하며 익힐 수 있습니다.
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 빈도 분석, TF-IDF, N-gram
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 토픽 모델링 (LDA, BERTopic)
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> AI 기반 결과 해석
+                        </li>
+                    </ul>
+                </div>
+                <div class="backdrop-glass rounded-2xl p-8">
+                    <div class="benefit-badge mb-6">혜택 2</div>
+                    <h3 class="text-2xl font-bold mb-4">텍스트마이닝 기초 이론</h3>
+                    <p class="text-gray-300 mb-4">
+                        연구보고서, 논문에 바로 적용할 수 있는<br>
+                        <span class="text-accent font-semibold">텍스트마이닝 핵심 이론</span>을 알려드립니다.
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 텍스트 전처리 기초
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 빈도 분석 & 키워드 추출
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 토픽 모델링 원리
+                        </li>
+                    </ul>
+                </div>
+                <div class="backdrop-glass rounded-2xl p-8 md:col-span-2">
+                    <div class="benefit-badge mb-6">혜택 3</div>
+                    <h3 class="text-2xl font-bold mb-4">실습 중심 커리큘럼</h3>
+                    <p class="text-gray-300">
+                        이론만 듣고 끝나지 않습니다. <span class="text-accent font-semibold">TexNova를 활용한 실습</span>을 통해
+                        배운 내용을 직접 적용해보고, 실제 분석 결과를 도출해봅니다.
+                        코딩 없이도 전문적인 텍스트마이닝·빅데이터 분석이 가능합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- TexNova 소개 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">About TexNova</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    실습에 사용할 <span class="gradient-text">TexNova</span>는?
+                </h2>
+            </div>
+            <div class="backdrop-glass rounded-2xl p-8 md:p-12 text-center mb-12">
+                <p class="text-xl md:text-2xl mb-6">
+                    TexNova는 분석가의 사고를 AI로 확장하는<br>
+                    <span class="text-accent font-bold">LLM 기반 텍스트마이닝·빅데이터 분석 플랫폼</span>입니다.
+                </p>
+                <div class="process-flow mb-8">
+                    <span class="process-step">분석</span>
+                    <span class="process-arrow">→</span>
+                    <span class="process-step">해석</span>
+                    <span class="process-arrow">→</span>
+                    <span class="process-step">검증</span>
+                    <span class="process-arrow">→</span>
+                    <span class="process-step">재분석</span>
+                </div>
+                <p class="text-gray-300">
+                    데이터 분석 전문가의 사고 과정을 그대로 SaaS에 반영하여<br>
+                    <span class="text-white font-semibold">코딩 없이도 전문가 수준의 분석</span>이 가능합니다.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="analysis-card text-center">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h4 class="font-bold mb-2 text-primary-color">기본 텍스트마이닝</h4>
+                    <p class="text-gray-400 text-sm">빈도(TF), TF-IDF, N-gram<br>단어 네트워크, 중심성 분석</p>
+                </div>
+                <div class="analysis-card text-center">
+                    <div class="text-4xl mb-4">🤖</div>
+                    <h4 class="font-bold mb-2 text-primary-color">토픽 · AI 분석</h4>
+                    <p class="text-gray-400 text-sm">LDA, STM, BERTopic<br>ChatGPT 기반 해석</p>
+                </div>
+                <div class="analysis-card text-center">
+                    <div class="text-4xl mb-4">💡</div>
+                    <h4 class="font-bold mb-2 text-primary-color">AI 해석 제공</h4>
+                    <p class="text-gray-400 text-sm">분석 결과의 의미를<br>자연어로 설명</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- 커리큘럼 -->
+    <section id="curriculum" class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Curriculum</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="gradient-text">강의 커리큘럼</span>
+                </h2>
+                <p class="text-gray-400">이론과 실습을 균형 있게 구성했습니다</p>
+            </div>
+            <div class="space-y-6">
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">1</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">텍스트마이닝 개요</h4>
+                            <p class="text-gray-400 mb-3">텍스트마이닝이란? / 빅데이터 분석 연구에서의 활용</p>
+                            <span class="tag text-xs">이론</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">2</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">데이터 수집과 전처리</h4>
+                            <p class="text-gray-400 mb-3">텍스트 데이터 수집 방법 / 형태소 분석 / 불용어 처리</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">3</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">빈도 분석 & 키워드 추출</h4>
+                            <p class="text-gray-400 mb-3">TF, TF-IDF 개념 / N-gram 분석 / TexNova 실습</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">4</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">토픽 모델링</h4>
+                            <p class="text-gray-400 mb-3">LDA 원리 이해 / BERTopic 소개 / TexNova로 토픽 분석</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">5</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">AI 기반 결과 해석</h4>
+                            <p class="text-gray-400 mb-3">분석 결과 해석 방법 / AI를 활용한 인사이트 도출</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">6</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">연구보고서 작성 팁</h4>
+                            <p class="text-gray-400 mb-3">분석 결과를 보고서/논문에 활용하는 방법</p>
+                            <span class="tag text-xs">이론</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- 왜 이 강의인가 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Why This Lecture</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    왜 이 강의를 <span class="gradient-text">들어야 할까요?</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">코딩 없이 분석 가능</h4>
+                    <p class="text-gray-300">Python, R을 몰라도 TexNova를 통해<br>전문적인 텍스트마이닝이 가능합니다.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">이론 + 실습 동시에</h4>
+                    <p class="text-gray-300">단순히 도구 사용법만 배우는 게 아니라<br>기초 이론까지 함께 학습합니다.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">실무 적용 가능</h4>
+                    <p class="text-gray-300">연구보고서, 논문, 정책 분석 등<br>실제 업무에 바로 활용할 수 있습니다.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">300건+ 프로젝트 노하우</h4>
+                    <p class="text-gray-300">공공·연구 프로젝트 경험을 바탕으로<br>실전에서 필요한 내용만 담았습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- CTA Section -->
+    <section id="apply" class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto">
+            <div class="gradient-bg rounded-3xl p-8 md:p-12 text-center glow-effect">
+                <div class="mb-6">
+                    <span class="free-badge text-base py-2 px-6">100% 무료</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
+                    지금 무료 강의 신청하고<br>
+                    텍스트마이닝을 시작하세요
+                </h2>
+                <div class="space-y-4 mb-10 text-gray-800">
+                    <p class="text-lg">
+                        <span class="font-semibold">✓ 무료 강의 수강</span> + <span class="font-semibold">TexNova 무료 이용권</span>
+                    </p>
+                    <p class="text-lg">
+                        ✓ 텍스트마이닝·빅데이터 분석 <span class="font-semibold">이론과 실습</span> 한 번에
+                    </p>
+                    <p class="text-lg">
+                        ✓ 코딩 없이 <span class="font-semibold">전문가 수준의 분석</span> 경험
+                    </p>
+                </div>
+                <a href="#contact" class="inline-block bg-gray-900 text-white font-bold py-4 px-12 rounded-full hover:bg-gray-800 transition-all transform hover:scale-105 text-lg">
+                    무료 강의 신청하기
+                </a>
+                <p class="text-gray-700 mt-6 text-sm">
+                    신청 후 안내 메일을 보내드립니다
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 강의 정보 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Lecture Info</span>
+                <h2 class="text-3xl md:text-4xl font-bold">
+                    <span class="gradient-text">강의 정보</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">💰</div>
+                    <h4 class="font-bold mb-2">수강료</h4>
+                    <p class="text-accent font-bold text-xl">무료</p>
+                </div>
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">🎁</div>
+                    <h4 class="font-bold mb-2">특전</h4>
+                    <p class="text-gray-400">TexNova 무료 이용권</p>
+                </div>
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">👥</div>
+                    <h4 class="font-bold mb-2">대상</h4>
+                    <p class="text-gray-400 text-sm">연구자, 대학원생,<br>분석 입문자</p>
+                </div>
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">💬</div>
+                    <h4 class="font-bold mb-2">문의</h4>
+                    <p class="text-gray-400 text-sm">홈페이지 / 이메일</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bonus Section -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="tag mb-4 inline-block">Bonus</span>
+                <h2 class="text-2xl md:text-3xl font-bold">
+                    TexNova <span class="gradient-text">추가 지원</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="backdrop-glass rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">🇰🇷</div>
+                    <p class="font-semibold">한국어 최적화<br>형태소 분석 엔진</p>
+                </div>
+                <div class="backdrop-glass rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">🌐</div>
+                    <p class="font-semibold">영어 텍스트<br>분석 지원</p>
+                </div>
+                <div class="backdrop-glass rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">📊</div>
+                    <p class="font-semibold">대용량 데이터<br>처리 가능</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-gray-800 mb-20">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="mb-6">
+                <span class="text-2xl font-bold gradient-text">TexNova</span>
+            </div>
+            <p class="text-gray-500 mb-4">
+                © 2025 HappyAI · TexNova. All Rights Reserved.
+            </p>
+            <p class="text-gray-600 text-sm">
+                ※ 개인 논문 대필·컨설팅 서비스와 무관
+            </p>
+        </div>
+    </footer>
+
+    <!-- Floating CTA Banner -->
+    <div class="floating-banner">
+        <p class="text-white font-semibold hidden sm:block">텍스트마이닝·빅데이터 분석, 무료로 배우세요</p>
+        <a href="#apply" class="btn-cta text-sm py-3 px-6">무료 강의 신청</a>
+    </div>
+
+    <!-- JavaScript for scroll animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section-reveal');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TexNova 강의 신청 관리자</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: var(--bg-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.3);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-light);
+            color: var(--primary-light);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            color: var(--bg-dark);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        th {
+            background: rgba(99, 102, 241, 0.1);
+            font-weight: 600;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .badge-gray {
+            background: rgba(156, 163, 175, 0.2);
+            color: #9ca3af;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, var(--bg-card), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .concern-text {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .concern-text:hover {
+            white-space: normal;
+            overflow: visible;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 20px 0;
+        }
+
+        .search-input {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 8px;
+            color: white;
+            width: 300px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">
+                    <span class="gradient-text">TexNova</span> 관리자
+                </h1>
+                <p class="text-gray-400 text-sm mt-1">강의 신청 현황 관리</p>
+            </div>
+            <a href="lecture-full.html" class="btn btn-outline text-sm">
+                ← 강의 페이지로 돌아가기
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm mb-2">총 신청자 수</p>
+                <p class="stat-value" id="totalCount">0</p>
+            </div>
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm mb-2">마케팅 수신 동의</p>
+                <p class="stat-value" id="marketingCount">0</p>
+            </div>
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm mb-2">오늘 신청</p>
+                <p class="stat-value" id="todayCount">0</p>
+            </div>
+            <div class="stat-card">
+                <p class="text-gray-400 text-sm mb-2">최근 7일</p>
+                <p class="stat-value" id="weekCount">0</p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card p-6 mb-8">
+            <div class="flex flex-wrap gap-4 justify-between items-center">
+                <div class="flex gap-4 items-center">
+                    <input type="text" id="searchInput" class="search-input" placeholder="이름, 이메일, 전화번호 검색...">
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="exportToExcel()" class="btn btn-primary">
+                        📥 엑셀 다운로드
+                    </button>
+                    <button onclick="confirmDeleteAll()" class="btn btn-danger">
+                        🗑 전체 삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>이름</th>
+                            <th>이메일</th>
+                            <th>전화번호</th>
+                            <th>직종/직책</th>
+                            <th>고민 내용</th>
+                            <th>개인정보 동의</th>
+                            <th>마케팅 동의</th>
+                            <th>신청일시</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applicationTable">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">📋</div>
+                <p class="text-xl font-semibold mb-2">신청 내역이 없습니다</p>
+                <p class="text-gray-500">강의 신청이 들어오면 여기에 표시됩니다.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let applications = [];
+
+        // Load data from localStorage
+        function loadData() {
+            applications = JSON.parse(localStorage.getItem('texnova_applications') || '[]');
+            updateStats();
+            renderTable();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const today = new Date().toDateString();
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+
+            document.getElementById('totalCount').textContent = applications.length;
+            document.getElementById('marketingCount').textContent = applications.filter(a => a.marketingAgree).length;
+            document.getElementById('todayCount').textContent = applications.filter(a => {
+                const date = new Date(a.id);
+                return date.toDateString() === today;
+            }).length;
+            document.getElementById('weekCount').textContent = applications.filter(a => {
+                const date = new Date(a.id);
+                return date >= weekAgo;
+            }).length;
+        }
+
+        // Render table
+        function renderTable(searchTerm = '') {
+            const tbody = document.getElementById('applicationTable');
+            const emptyState = document.getElementById('emptyState');
+
+            let filteredData = applications;
+
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filteredData = applications.filter(a =>
+                    a.name.toLowerCase().includes(term) ||
+                    a.email.toLowerCase().includes(term) ||
+                    a.phone.includes(term)
+                );
+            }
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = filteredData.map((app, index) => `
+                <tr>
+                    <td>${filteredData.length - index}</td>
+                    <td><strong>${escapeHtml(app.name)}</strong></td>
+                    <td>${escapeHtml(app.email)}</td>
+                    <td>${escapeHtml(app.phone)}</td>
+                    <td>${escapeHtml(app.job)}</td>
+                    <td class="concern-text" title="${escapeHtml(app.concern || '-')}">${escapeHtml(app.concern || '-')}</td>
+                    <td><span class="badge badge-success">동의</span></td>
+                    <td><span class="badge ${app.marketingAgree ? 'badge-success' : 'badge-gray'}">${app.marketingAgree ? '동의' : '미동의'}</span></td>
+                    <td>${app.submittedAt}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteApplication(${app.id})" title="삭제">
+                            🗑
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Delete single application
+        function deleteApplication(id) {
+            if (confirm('이 신청 내역을 삭제하시겠습니까?')) {
+                applications = applications.filter(a => a.id !== id);
+                localStorage.setItem('texnova_applications', JSON.stringify(applications));
+                loadData();
+            }
+        }
+
+        // Delete all applications
+        function confirmDeleteAll() {
+            if (applications.length === 0) {
+                alert('삭제할 데이터가 없습니다.');
+                return;
+            }
+            if (confirm(`정말 ${applications.length}개의 모든 신청 내역을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
+                localStorage.removeItem('texnova_applications');
+                loadData();
+            }
+        }
+
+        // Export to Excel (CSV)
+        function exportToExcel() {
+            if (applications.length === 0) {
+                alert('다운로드할 데이터가 없습니다.');
+                return;
+            }
+
+            const headers = ['번호', '이름', '이메일', '전화번호', '직종/직책', '고민 내용', '개인정보 동의', '마케팅 동의', '신청일시'];
+
+            const rows = applications.map((app, index) => [
+                applications.length - index,
+                app.name,
+                app.email,
+                app.phone,
+                app.job,
+                app.concern || '',
+                app.privacyAgree ? '동의' : '미동의',
+                app.marketingAgree ? '동의' : '미동의',
+                app.submittedAt
+            ]);
+
+            // BOM for Korean characters in Excel
+            let csvContent = '\uFEFF';
+            csvContent += headers.join(',') + '\n';
+            csvContent += rows.map(row =>
+                row.map(cell => {
+                    // Escape quotes and wrap in quotes if contains comma or newline
+                    const escaped = String(cell).replace(/"/g, '""');
+                    return `"${escaped}"`;
+                }).join(',')
+            ).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            const now = new Date();
+            const filename = `TexNova_신청목록_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.csv`;
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            renderTable(e.target.value);
+        });
+
+        // Initial load
+        loadData();
+
+        // Auto refresh every 30 seconds
+        setInterval(loadData, 30000);
+    </script>
+</body>
+</html>
