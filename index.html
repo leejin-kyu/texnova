@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TexNova 무료 특강 - 텍스트마이닝·빅데이터 분석 이론과 실습</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-light: #67e8f9;
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .backdrop-glass {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .card-luxury {
+            background: linear-gradient(145deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 26, 0.95));
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .card-luxury:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .section-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-accent {
+            color: var(--accent);
+        }
+
+        .text-primary-color {
+            color: var(--primary-light);
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .hero-bg {
+            background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at bottom right, rgba(34, 211, 238, 0.1) 0%, transparent 50%);
+        }
+
+        .floating-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 16px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 -4px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: var(--bg-dark);
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-light);
+            color: var(--primary-light);
+            padding: 12px 28px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            color: var(--bg-dark);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .comparison-table th {
+            background: rgba(99, 102, 241, 0.1);
+            font-weight: 700;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .process-step {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .process-arrow {
+            color: var(--accent);
+            font-size: 24px;
+        }
+
+        .analysis-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .before-after {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .before {
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+
+        .after {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .arrow-right {
+            color: var(--primary-light);
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 80px 0;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(34, 211, 238, 0.1));
+            border-left: 4px solid var(--accent);
+            padding: 24px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-light);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .benefit-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: var(--bg-dark);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .curriculum-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .section-divider {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 60px 20px;
+            text-align: center;
+            margin: 80px 0;
+        }
+
+        @media (max-width: 768px) {
+            .floating-banner {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px 16px;
+            }
+
+            .process-flow {
+                flex-direction: column;
+            }
+
+            .process-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, var(--bg-card), var(--bg-dark));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 24px 24px 0;
+            text-align: center;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-label .required {
+            color: #ef4444;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .form-checkbox label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-dark);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(34, 211, 238, 0.4);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success Modal */
+        .success-content {
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 40px;
+        }
+
+        .kakao-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #FEE500;
+            color: #000;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+        }
+
+        .kakao-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(254, 229, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center px-4 py-20">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="mb-6">
+                <span class="free-badge mb-2 inline-block">100% 무료 특강</span>
+            </div>
+            <div class="mb-8">
+                <span class="tag mb-4 inline-block">AI-Powered Text Analysis Platform</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                텍스트 데이터, 단순 분석을 넘어<br>
+                <span class="gradient-text">AI를 도구로 활용하는 단계로</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8">
+                "TexNova는 분석가의 사고를 AI로 확장하는 플랫폼입니다."
+            </p>
+            <div class="backdrop-glass rounded-2xl p-8 mb-10 max-w-3xl mx-auto">
+                <p class="text-lg md:text-xl mb-4">
+                    AI가 분석가의 사고 과정을 대신하는<br>
+                    <span class="text-accent font-bold">LLM 기반 텍스트마이닝·빅데이터 분석 플랫폼, TexNova</span>
+                </p>
+                <p class="text-gray-400">
+                    정책 분석 · 학술 연구 · 개인 연구를 위해<br>
+                    <span class="text-primary-color">분석 → 해석 → 재분석</span>의 전 과정을 하나로 연결한<br>
+                    전문가 지향 빅데이터 분석 연구 SaaS
+                </p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="openModal()" class="btn-cta">무료 강의 신청하기</button>
+                <a href="#features" class="btn-outline">기능 살펴보기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Question Section -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="highlight-box text-left mb-8">
+                <p class="text-xl md:text-2xl mb-4">
+                    정책·동향 분석, SNS, 설문지 등<br>
+                    텍스트 데이터를 분석하고 싶지만<br>
+                    <span class="text-accent font-semibold">이론과 코딩이 부담스러우신가요?</span>
+                </p>
+            </div>
+            <div class="highlight-box text-left">
+                <p class="text-xl md:text-2xl">
+                    텍스트 데이터는 쌓여 있는데<br>
+                    <span class="text-accent font-semibold">'의미 있는 인사이트'로 바꾸는 과정이 막막하지 않으신가요?</span>
+                </p>
+            </div>
+
+            <!-- Demo Video Preview -->
+            <div class="mt-12">
+                <div class="backdrop-glass rounded-2xl p-4 glow-effect">
+                    <div class="relative rounded-xl overflow-hidden" style="aspect-ratio: 16/9;">
+                        <video
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            class="w-full h-full object-cover"
+                            style="border-radius: 12px;"
+                        >
+                            <source src="demo-video.mp4" type="video/mp4">
+                            브라우저가 동영상을 지원하지 않습니다.
+                        </video>
+                    </div>
+                    <p class="text-center text-gray-400 text-sm mt-4">
+                        TexNova를 통한 AI 기반 빅데이터 분석 예시
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- Problem Section -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Problem</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    이런 고민, <span class="gradient-text">TexNova</span>를 만들며<br>
+                    가장 많이 들었습니다
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">01</div>
+                    <p class="text-lg">빈도·토픽·네트워크 분석을 하고 싶지만<br><span class="text-gray-400">어디서부터 시작해야 할지 모르겠다</span></p>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">02</div>
+                    <p class="text-lg">데이터를 뽑아도<br><span class="text-gray-400">결과를 이해하고 설명하는 게 어렵다</span></p>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">03</div>
+                    <p class="text-lg">결과에 대한 추가 질문이 반복되며<br><span class="text-gray-400">분석이 끝나지 않는다</span></p>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="text-accent text-2xl mb-3">04</div>
+                    <p class="text-lg">비전문 외주 결과물은<br><span class="text-gray-400">왜 이런 결론이 나왔는지 설명이 없다</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- What is TexNova -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">What is TexNova</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    TexNova는 <span class="gradient-text">단순한 분석 도구</span>가 아닙니다
+                </h2>
+            </div>
+            <div class="backdrop-glass rounded-2xl p-8 md:p-12 text-center">
+                <p class="text-xl md:text-2xl mb-8">
+                    TexNova는<br>
+                    데이터 분석가가 실제로 수행하는
+                </p>
+                <div class="process-flow mb-8">
+                    <span class="process-step">분석</span>
+                    <span class="process-arrow">→</span>
+                    <span class="process-step">해석</span>
+                    <span class="process-arrow">→</span>
+                    <span class="process-step">검증</span>
+                    <span class="process-arrow">→</span>
+                    <span class="process-step">재분석</span>
+                </div>
+                <p class="text-xl md:text-2xl text-gray-300">
+                    이 사고 과정을<br>
+                    <span class="text-accent font-bold">AI로 구조화한 텍스트마이닝 플랫폼</span>입니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who is it for -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Who is it for</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    TexNova는 다음을 위해 <span class="gradient-text">설계</span>됐습니다
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="card-luxury p-8">
+                    <div class="feature-icon">🏛️</div>
+                    <h3 class="text-xl font-bold mb-3">공공기관 · 연구기관 · 대학 · 기업</h3>
+                    <p class="text-gray-400">대규모 텍스트 데이터를 체계적으로 분석해야 하는 조직</p>
+                </div>
+                <div class="card-luxury p-8">
+                    <div class="feature-icon">🔬</div>
+                    <h3 class="text-xl font-bold mb-3">텍스트 데이터를 직접 분석하고<br>이해해야 하는 연구자</h3>
+                    <p class="text-gray-400">깊이 있는 분석과 해석이 필요한 전문가</p>
+                </div>
+                <div class="card-luxury p-8 md:col-span-2">
+                    <div class="feature-icon">💡</div>
+                    <h3 class="text-xl font-bold mb-3">코딩 없이도 분석 결과를 설명할 수 있어야 하는 사람</h3>
+                    <p class="text-gray-400">기술적 장벽 없이 전문적인 분석을 수행하고자 하는 모든 분</p>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p class="text-lg text-center">
+                    <span class="text-accent font-bold">300건 이상</span>의 공공·연구 프로젝트를 수행하며<br>
+                    분석가들이 실제로 가장 어려워했던 지점을<br>
+                    그대로 SaaS 구조에 옮겼습니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- Demo Video Section -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="tag mb-4 inline-block">Demo</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    TexNova를 통한 <span class="gradient-text">AI 기반 빅데이터 분석</span>
+                </h2>
+                <p class="text-gray-400">실제 분석 예시를 확인해보세요</p>
+            </div>
+
+            <!-- Main Demo Video -->
+            <div class="backdrop-glass rounded-2xl p-4 md:p-6 glow-effect mb-8">
+                <div class="relative rounded-xl overflow-hidden" style="aspect-ratio: 16/9;">
+                    <video
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        class="w-full h-full object-cover"
+                        style="border-radius: 12px;"
+                    >
+                        <source src="demo-video.mp4" type="video/mp4">
+                        브라우저가 동영상을 지원하지 않습니다.
+                    </video>
+                </div>
+                <p class="text-center text-gray-400 text-sm mt-4">
+                    TexNova를 통한 AI 기반 빅데이터 분석 예시
+                </p>
+            </div>
+
+            <!-- Additional Demo Videos -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="backdrop-glass rounded-2xl p-4 glow-effect">
+                    <div class="relative rounded-xl overflow-hidden" style="aspect-ratio: 16/9;">
+                        <video
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            class="w-full h-full object-cover"
+                            style="border-radius: 12px;"
+                        >
+                            <source src="demo-network-cluster.mp4" type="video/mp4">
+                            브라우저가 동영상을 지원하지 않습니다.
+                        </video>
+                    </div>
+                    <p class="text-center text-gray-400 text-sm mt-4">
+                        TexNova를 통한 네트워크 군집 분석 예시
+                    </p>
+                </div>
+                <div class="backdrop-glass rounded-2xl p-4 glow-effect">
+                    <div class="relative rounded-xl overflow-hidden" style="aspect-ratio: 16/9;">
+                        <video
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            class="w-full h-full object-cover"
+                            style="border-radius: 12px;"
+                        >
+                            <source src="demo-network.mp4" type="video/mp4">
+                            브라우저가 동영상을 지원하지 않습니다.
+                        </video>
+                    </div>
+                    <p class="text-center text-gray-400 text-sm mt-4">
+                        네트워크 군집 분석 예시
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- Core Outcome -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="tag mb-4 inline-block">Core Outcome</span>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                누구나 <span class="gradient-text">전문가 수준</span>의<br>
+                빅데이터 분석 인사이트를 도출할 수 있습니다
+            </h2>
+            <div class="backdrop-glass rounded-2xl p-8 mt-10">
+                <p class="text-xl">
+                    결과를 <span class="text-gray-400">"보는 것"</span>에서 끝나지 않고<br>
+                    <span class="text-accent font-bold">"이해하고 설명할 수 있는 단계"</span>까지 도달합니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section id="features" class="py-20 px-4 section-reveal">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Value Proposition</span>
+                <h2 class="text-3xl md:text-4xl font-bold">
+                    TexNova의 <span class="gradient-text">핵심 가치</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card-luxury p-8">
+                    <div class="text-accent text-4xl font-bold mb-4">01</div>
+                    <h3 class="text-xl font-bold mb-4">분석가의 사고 흐름 내재화</h3>
+                    <div class="process-flow text-sm mb-4">
+                        <span class="process-step text-sm py-2 px-4">분석</span>
+                        <span class="process-arrow text-base">→</span>
+                        <span class="process-step text-sm py-2 px-4">해석</span>
+                        <span class="process-arrow text-base">→</span>
+                        <span class="process-step text-sm py-2 px-4">검증</span>
+                        <span class="process-arrow text-base">→</span>
+                        <span class="process-step text-sm py-2 px-4">재분석</span>
+                    </div>
+                    <p class="text-gray-400">실제 데이터 분석 전문가의 작업 순서를<br>그대로 SaaS에 반영했습니다.</p>
+                </div>
+                <div class="card-luxury p-8">
+                    <div class="text-accent text-4xl font-bold mb-4">02</div>
+                    <h3 class="text-xl font-bold mb-4">LLM 기반 '설명하는 분석'</h3>
+                    <p class="text-gray-300 mb-4">ChatGPT 등 LLM이<br>분석 결과의 <span class="text-accent">의미·특징·시사점</span>을<br>자연어로 설명합니다.</p>
+                    <p class="text-gray-400">숫자와 그래프를 넘어, 이해 가능한 인사이트로</p>
+                </div>
+                <div class="card-luxury p-8">
+                    <div class="text-accent text-4xl font-bold mb-4">03</div>
+                    <h3 class="text-xl font-bold mb-4">반복 실험에 최적화된 구조</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 분석 단계 자동 기록
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 이전 단계 복원
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 즉시 재분석 가능
+                        </li>
+                    </ul>
+                    <p class="text-gray-400 mt-4">연구자는 탐색과 검증에만 집중할 수 있습니다.</p>
+                </div>
+                <div class="card-luxury p-8">
+                    <div class="text-accent text-4xl font-bold mb-4">04</div>
+                    <h3 class="text-xl font-bold mb-4">전문가·비전문가 모두를 위한 사용성</h3>
+                    <p class="text-gray-300 mb-4">결과를 보고<br>AI에게 질문하며 분석 방향을 함께 조정하는 구조</p>
+                    <div class="highlight-box mt-4">
+                        <p class="text-sm">"이 결과가 왜 나왔지?"라는 질문에<br><span class="text-accent font-semibold">즉시 답을 얻을 수 있습니다.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- TexNova Points -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="backdrop-glass rounded-2xl p-8">
+                    <span class="tag mb-4 inline-block">Point 1</span>
+                    <h3 class="text-2xl font-bold mb-6">
+                        결과만 던져주는 분석은<br><span class="gradient-text">끝났습니다</span>
+                    </h3>
+                    <p class="text-gray-300 mb-4">
+                        TexNova는<br>
+                        모든 분석 결과에 대해
+                    </p>
+                    <p class="text-accent text-xl font-semibold mb-4">
+                        "왜 이런 결과가 나왔는지"를<br>함께 설명합니다.
+                    </p>
+                    <p class="text-gray-400">
+                        보고서용 결과가 아니라<br>
+                        <span class="text-white">이해 가능한 분석</span>을 제공합니다.
+                    </p>
+                </div>
+                <div class="backdrop-glass rounded-2xl p-8">
+                    <span class="tag mb-4 inline-block">Point 2</span>
+                    <h3 class="text-2xl font-bold mb-6">
+                        AI는 계산기가 아니라<br><span class="gradient-text">분석 파트너</span>입니다
+                    </h3>
+                    <p class="text-gray-300">
+                        AI가 분석 결과를 해석하고<br>
+                        사용자의 추가 질문에 따라<br>
+                        <span class="text-accent font-semibold">분석의 깊이를 함께 확장</span>합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Features -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Features</span>
+                <h2 class="text-3xl md:text-4xl font-bold">
+                    <span class="gradient-text">제공 분석 기능</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="analysis-card">
+                    <h3 class="text-xl font-bold mb-4 text-primary-color">기본 텍스트마이닝</h3>
+                    <ul class="space-y-2 text-gray-300 mb-6">
+                        <li>• 빈도(TF), TF-IDF, N-gram</li>
+                        <li>• 단어 네트워크 분석</li>
+                        <li>• 중심성 분석</li>
+                    </ul>
+                    <div class="before-after">
+                        <span class="before">지표 나열</span>
+                        <span class="arrow-right">→</span>
+                        <span class="after">의미 설명</span>
+                    </div>
+                </div>
+                <div class="analysis-card">
+                    <h3 class="text-xl font-bold mb-4 text-primary-color">토픽 · AI 분석</h3>
+                    <ul class="space-y-2 text-gray-300 mb-6">
+                        <li>• LDA, STM, DTM</li>
+                        <li>• BERTopic, LLM 임베딩</li>
+                        <li>• ChatGPT · LLaMA 기반 해석</li>
+                    </ul>
+                    <div class="before-after">
+                        <span class="before">토픽 리스트</span>
+                        <span class="arrow-right">→</span>
+                        <span class="after">맥락 이해</span>
+                    </div>
+                </div>
+                <div class="analysis-card">
+                    <h3 class="text-xl font-bold mb-4 text-primary-color">단어 관계 분석</h3>
+                    <ul class="space-y-2 text-gray-300 mb-6">
+                        <li>• 단어 네트워크 분석</li>
+                        <li>• 관계 중심 해석 제공</li>
+                        <li>• 시각화 & 인사이트</li>
+                    </ul>
+                    <div class="before-after">
+                        <span class="before">복잡한 그래프</span>
+                        <span class="arrow-right">→</span>
+                        <span class="after">명확한 스토리</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LDA Topic Modeling Demo -->
+            <div class="mt-12">
+                <div class="backdrop-glass rounded-2xl p-4 md:p-6 glow-effect">
+                    <div class="relative rounded-xl overflow-hidden" style="aspect-ratio: 16/9;">
+                        <video
+                            autoplay
+                            loop
+                            muted
+                            playsinline
+                            class="w-full h-full object-cover"
+                            style="border-radius: 12px;"
+                        >
+                            <source src="demo-lda-topic.mp4" type="video/mp4">
+                            브라우저가 동영상을 지원하지 않습니다.
+                        </video>
+                    </div>
+                    <p class="text-center text-gray-400 text-sm mt-4">
+                        TexNova를 통한 LDA 토픽모델링 추출 예시
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- Branding Message -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8">
+                텍스트마이닝의 기준은<br><span class="gradient-text">달라져야 합니다</span>
+            </h2>
+            <div class="backdrop-glass rounded-2xl p-8 md:p-12">
+                <p class="text-xl mb-6">
+                    TexNova는<br>
+                    <span class="text-accent">분석 결과</span> + <span class="text-accent">AI 해석</span> + <span class="text-accent">추가 질의</span>를<br>
+                    하나의 흐름으로 제공합니다.
+                </p>
+                <p class="text-2xl font-bold gradient-text">
+                    TexNova는<br>
+                    AI 기반 빅데이터 분석 연구 파트너입니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Comparison</span>
+                <h2 class="text-3xl md:text-4xl font-bold">
+                    외주 vs <span class="gradient-text">TexNova SaaS</span>
+                </h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="comparison-table backdrop-glass rounded-2xl overflow-hidden">
+                    <thead>
+                        <tr>
+                            <th class="text-gray-300">구분</th>
+                            <th class="text-gray-300">외주 분석</th>
+                            <th class="text-accent">TexNova SaaS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-semibold">대상</td>
+                            <td>대형 프로젝트</td>
+                            <td class="text-accent">연구자 개인 · 연구실</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">분석 주체</td>
+                            <td>외부 전문가</td>
+                            <td class="text-accent">사용자 + AI</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">역할</td>
+                            <td>분석을 대신 수행</td>
+                            <td class="text-accent">분석을 직접 수행하도록 지원</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">결과물</td>
+                            <td>최종 보고서</td>
+                            <td class="text-accent">분석 결과 + AI 해석</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">반복 분석</td>
+                            <td>프로젝트 단위</td>
+                            <td class="text-accent">사용자 주도</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold">내부 역량</td>
+                            <td>외부 의존</td>
+                            <td class="text-accent">사용 자체가 학습</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="highlight-box mt-8 text-center">
+                <p class="text-lg">
+                    TexNova는 대필·외주 서비스가 아닙니다.<br>
+                    <span class="text-accent font-semibold">연구자가 스스로 이해하고 탐색하기 위한 분석 환경</span>입니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 강의 신청 섹션 시작 ========== -->
+
+    <!-- Section Divider -->
+    <div class="section-divider">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            TexNova를 무료로 배워보세요
+        </h2>
+        <p class="text-xl text-gray-800">
+            무료 특강 신청 시 TexNova 무료 이용권 + 텍스트마이닝 이론까지
+        </p>
+    </div>
+
+    <!-- 강의 소개 -->
+    <section id="lecture" class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="free-badge mb-4 inline-block">100% 무료 특강</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    텍스트마이닝·빅데이터 분석<br>
+                    <span class="gradient-text">이론부터 실습까지</span>
+                </h2>
+                <p class="text-xl text-gray-300 mt-6">
+                    무료 강의를 신청하시면<br>
+                    <span class="text-accent font-bold">TexNova를 무료로 사용</span>하실 수 있고<br>
+                    텍스트마이닝·빅데이터 분석 <span class="text-accent font-bold">이론과 실습</span>을 함께 경험하실 수 있습니다.
+                </p>
+            </div>
+
+            <!-- 강의 혜택 -->
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="backdrop-glass rounded-2xl p-8">
+                    <div class="benefit-badge mb-6">혜택 1</div>
+                    <h3 class="text-2xl font-bold mb-4">TexNova 무료 이용권</h3>
+                    <p class="text-gray-300 mb-4">
+                        강의 수강생에게 <span class="text-accent font-semibold">TexNova 플랫폼을 무료로</span> 제공합니다.
+                        강의에서 배운 내용을 직접 실습하며 익힐 수 있습니다.
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 빈도 분석, TF-IDF, N-gram
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 토픽 모델링 (LDA)
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> AI 기반 결과 해석
+                        </li>
+                    </ul>
+                </div>
+                <div class="backdrop-glass rounded-2xl p-8">
+                    <div class="benefit-badge mb-6">혜택 2</div>
+                    <h3 class="text-2xl font-bold mb-4">텍스트마이닝 기초 이론</h3>
+                    <p class="text-gray-300 mb-4">
+                        연구보고서, 논문에 바로 적용할 수 있는<br>
+                        <span class="text-accent font-semibold">텍스트마이닝 핵심 이론</span>을 알려드립니다.
+                    </p>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 텍스트 전처리 기초
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 빈도 분석 & 키워드 추출
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-accent">✓</span> 토픽 모델링 원리
+                        </li>
+                    </ul>
+                </div>
+                <div class="backdrop-glass rounded-2xl p-8 md:col-span-2">
+                    <div class="benefit-badge mb-6">혜택 3</div>
+                    <h3 class="text-2xl font-bold mb-4">실습 중심 커리큘럼</h3>
+                    <p class="text-gray-300">
+                        이론만 듣고 끝나지 않습니다. <span class="text-accent font-semibold">TexNova를 활용한 실습</span>을 통해
+                        배운 내용을 직접 적용해보고, 실제 분석 결과를 도출해봅니다.
+                        코딩 없이도 전문적인 텍스트마이닝·빅데이터 분석이 가능합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 커리큘럼 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Curriculum</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="gradient-text">강의 커리큘럼</span>
+                </h2>
+                <p class="text-gray-400">이론과 실습을 균형 있게 구성했습니다</p>
+            </div>
+            <div class="space-y-6">
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">1</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">텍스트마이닝 개요</h4>
+                            <p class="text-gray-400 mb-3">텍스트마이닝이란? / 빅데이터 분석 연구에서의 활용</p>
+                            <span class="tag text-xs">이론</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">2</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">데이터 수집과 전처리</h4>
+                            <p class="text-gray-400 mb-3">텍스트 데이터 수집 방법 / 형태소 분석 / 불용어 처리</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">3</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">빈도 분석 & 키워드 추출</h4>
+                            <p class="text-gray-400 mb-3">TF, TF-IDF 개념 / N-gram 분석 / TexNova 실습</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">4</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">토픽 모델링</h4>
+                            <p class="text-gray-400 mb-3">LDA 원리 이해 / TexNova로 토픽 분석</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">5</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">AI 기반 결과 해석</h4>
+                            <p class="text-gray-400 mb-3">분석 결과 해석 방법 / AI를 활용한 인사이트 도출</p>
+                            <span class="tag text-xs">이론</span>
+                            <span class="tag text-xs ml-2">실습</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-luxury p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="curriculum-number">6</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">연구보고서 작성 팁</h4>
+                            <p class="text-gray-400 mb-3">분석 결과를 보고서에 활용하는 방법</p>
+                            <span class="tag text-xs">이론</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- 왜 이 강의인가 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">Why This Lecture</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    왜 이 강의를 <span class="gradient-text">들어야 할까요?</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">코딩 없이 분석 가능</h4>
+                    <p class="text-gray-300">Python, R을 몰라도 TexNova를 통해<br>전문적인 텍스트마이닝이 가능합니다.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">이론 + 실습 동시에</h4>
+                    <p class="text-gray-300">단순히 도구 사용법만 배우는 게 아니라<br>기초 이론까지 함께 학습합니다.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">실무 적용 가능</h4>
+                    <p class="text-gray-300">연구보고서, 논문, 정책 분석 등<br>실제 업무에 바로 활용할 수 있습니다.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 class="text-xl font-bold mb-3 text-accent">300건+ 프로젝트 노하우</h4>
+                    <p class="text-gray-300">공공·연구 프로젝트 경험을 바탕으로<br>실전에서 필요한 내용만 담았습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- 강의 참여 혜택 -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="tag mb-4 inline-block">Live Lecture</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    무료 라이브 강의에 <span class="gradient-text">참여만 하셔도</span>
+                </h2>
+            </div>
+            <div class="backdrop-glass rounded-2xl p-8 md:p-12 mb-12">
+                <div class="space-y-6 text-center">
+                    <p class="text-xl text-gray-300">
+                        텍스트 데이터 분석의 <span class="text-accent font-bold">전체 흐름</span>을 잡고,<br>
+                        TexNova로 <span class="text-accent font-bold">분석·해석을 바로 시작</span>하는 방법을 알 수 있습니다.
+                    </p>
+                    <p class="text-xl text-gray-300">
+                        TexNova를 활용하면<br>
+                        <span class="text-accent font-bold">인문학도, 비전공자</span>도 텍스트마이닝이 손쉽게 가능합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 성공 사례 -->
+            <div class="grid md:grid-cols-2 gap-6 mb-12">
+                <div class="card-luxury p-6">
+                    <p class="text-accent text-2xl mb-3">👉</p>
+                    <p class="text-gray-300">
+                        <span class="text-white font-semibold">[코딩을 못해 빅데이터 분석에 막막했던 문제]</span>를<br>
+                        TexNova로 분석을 빠르게 실행하고,<br>
+                        결과를 <span class="text-accent font-semibold">'설명'까지 할 수 있게</span> 되었습니다.
+                    </p>
+                </div>
+                <div class="card-luxury p-6">
+                    <p class="text-accent text-2xl mb-3">👉</p>
+                    <p class="text-gray-300">
+                        <span class="text-white font-semibold">[혼자 데이터 해석이 안 되어 방황했던 문제]</span>를<br>
+                        TexNova로 해결하니 연구/보고서에서<br>
+                        <span class="text-accent font-semibold">"왜 이런 결과가 나왔는지" 논리적으로 말할 수 있게</span> 되었습니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 일정 안내 -->
+            <div class="highlight-box text-center">
+                <p class="text-xl mb-2">이 핵심 정보를</p>
+                <p class="text-2xl md:text-3xl font-bold text-accent mb-2">2025년 1월 7일 (화) 저녁 8시</p>
+                <p class="text-xl">무료 라이브 강의에서 공개합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider max-w-4xl mx-auto"></div>
+
+    <!-- 수강 안내 -->
+    <section id="apply" class="py-20 px-4 section-reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="tag mb-4 inline-block">수강 안내</span>
+                <h2 class="text-3xl md:text-4xl font-bold">
+                    <span class="gradient-text">Lecture Info</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">📆</div>
+                    <h4 class="font-bold mb-2">강의 일정</h4>
+                    <p class="text-accent font-bold">2025년 1월 7일</p>
+                    <p class="text-gray-400 text-sm">화요일 저녁 8시</p>
+                </div>
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">👥</div>
+                    <h4 class="font-bold mb-2">수강 인원</h4>
+                    <p class="text-accent font-bold">선착순 50명</p>
+                    <p class="text-gray-400 text-sm">한정 모집</p>
+                </div>
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">🖥</div>
+                    <h4 class="font-bold mb-2">강의 방법</h4>
+                    <p class="text-accent font-bold">100% 온라인</p>
+                    <p class="text-gray-400 text-sm">LIVE 진행</p>
+                </div>
+                <div class="card-luxury p-6 text-center">
+                    <div class="text-accent text-3xl mb-3">💰</div>
+                    <h4 class="font-bold mb-2">수강료</h4>
+                    <p class="text-gray-400 text-sm line-through">정가 100,000원</p>
+                    <p class="text-accent font-bold text-xl">0원 (100% 할인)</p>
+                </div>
+            </div>
+
+            <!-- 신청 안내 -->
+            <div class="backdrop-glass rounded-2xl p-8 mb-12">
+                <h3 class="text-xl font-bold mb-4 text-center">신청 및 참여 안내</h3>
+                <ul class="space-y-3 text-gray-300 max-w-2xl mx-auto">
+                    <li class="flex items-start gap-3">
+                        <span class="text-accent">✓</span>
+                        <span>클래스 신청 시 <span class="text-accent font-semibold">카카오톡 오픈채팅방 초대</span> 안내를 받으실 수 있습니다.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-accent">✓</span>
+                        <span>강의 1일 전, 카톡방에 <span class="text-accent font-semibold">무료 라이브 주소</span>가 공유됩니다.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-yellow-400">⚠</span>
+                        <span class="text-yellow-200">카톡방에 입장하지 않을 시 특강 안내를 받을 수 없는 점 유의 바랍니다.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CTA -->
+            <div class="gradient-bg rounded-3xl p-8 md:p-12 text-center glow-effect">
+                <div class="mb-6">
+                    <span class="inline-block bg-gray-900 text-white py-2 px-6 rounded-full text-sm font-bold">100% 무료 · 선착순 50명</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
+                    지금 무료 강의 신청하고<br>
+                    텍스트마이닝을 시작하세요
+                </h2>
+                <div class="space-y-4 mb-10 text-gray-800">
+                    <p class="text-lg">
+                        <span class="font-semibold">✓ 무료 강의 수강</span> + <span class="font-semibold">TexNova 무료 이용권</span>
+                    </p>
+                    <p class="text-lg">
+                        ✓ 텍스트마이닝·빅데이터 분석 <span class="font-semibold">이론과 실습</span> 한 번에
+                    </p>
+                    <p class="text-lg">
+                        ✓ 코딩 없이 <span class="font-semibold">전문가 수준의 분석</span> 경험
+                    </p>
+                </div>
+                <button onclick="openModal()" class="inline-block bg-gray-900 text-white font-bold py-4 px-12 rounded-full hover:bg-gray-800 transition-all transform hover:scale-105 text-lg cursor-pointer">
+                    무료 강의 신청하기
+                </button>
+                <p class="text-gray-700 mt-6 text-sm">
+                    신청 후 카카오톡 오픈채팅방 초대 안내를 보내드립니다
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bonus Section -->
+    <section class="py-20 px-4 section-reveal">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="tag mb-4 inline-block">Bonus</span>
+                <h2 class="text-2xl md:text-3xl font-bold">
+                    TexNova <span class="gradient-text">추가 지원</span>
+                </h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="backdrop-glass rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">🇰🇷</div>
+                    <p class="font-semibold">한국어 최적화<br>형태소 분석 엔진 제공</p>
+                </div>
+                <div class="backdrop-glass rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">🌐</div>
+                    <p class="font-semibold">영어 텍스트<br>분석 지원</p>
+                </div>
+                <div class="backdrop-glass rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">📊</div>
+                    <p class="font-semibold">대용량 데이터 ·<br>다중 사용자 환경 지원</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-gray-800 mb-20">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="mb-6">
+                <span class="text-2xl font-bold gradient-text">TexNova</span>
+            </div>
+            <p class="text-gray-500 mb-4">
+                © 2025 HappyAI · TexNova. All Rights Reserved.
+            </p>
+            <p class="text-gray-600 text-sm">
+                ※ 개인 논문 대필·컨설팅 서비스와 무관
+            </p>
+        </div>
+    </footer>
+
+    <!-- Floating CTA Banner -->
+    <div class="floating-banner">
+        <p class="text-white font-semibold hidden sm:block">AI 기반 빅데이터 분석 TexNova, 무료로 배우세요</p>
+        <button onclick="openModal()" class="btn-cta text-sm py-3 px-6">무료 강의 신청</button>
+    </div>
+
+    <!-- Application Modal -->
+    <div id="applyModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <div class="free-badge mb-4">100% 무료</div>
+                <h3 class="text-2xl font-bold mb-2">무료 강의 신청</h3>
+                <p class="text-gray-400 text-sm">아래 정보를 입력해주세요</p>
+            </div>
+            <div class="modal-body">
+                <form id="applyForm">
+                    <div class="form-group">
+                        <label class="form-label">이름<span class="required">*</span></label>
+                        <input type="text" name="name" class="form-input" placeholder="홍길동" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">이메일<span class="required">*</span></label>
+                        <input type="email" name="email" class="form-input" placeholder="example@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">전화번호<span class="required">*</span></label>
+                        <input type="tel" name="phone" class="form-input" placeholder="010-0000-0000" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">직종 및 직책<span class="required">*</span></label>
+                        <input type="text" name="job" class="form-input" placeholder="예: 대학원생 / 연구원 / 공무원 등" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">빅데이터 분석·텍스트마이닝 관련 고민</label>
+                        <textarea name="concern" class="form-input form-textarea" placeholder="현재 겪고 계신 어려움이나 배우고 싶은 내용을 자유롭게 작성해주세요."></textarea>
+                    </div>
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="privacyAgree" name="privacyAgree" required>
+                        <label for="privacyAgree">개인정보 수집 및 이용에 동의합니다. <span class="text-accent">(필수)</span></label>
+                    </div>
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="marketingAgree" name="marketingAgree">
+                        <label for="marketingAgree">강의/세미나 관련 소식 수신에 동의합니다. (선택)</label>
+                    </div>
+                    <button type="submit" class="form-submit">신청하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSuccessModal()">&times;</button>
+            <div class="success-content">
+                <div class="success-icon">✓</div>
+                <h3 class="text-2xl font-bold mb-4">신청이 완료되었습니다!</h3>
+                <p class="text-gray-300 mb-6">
+                    아래 카카오톡 오픈채팅방에 입장하시면<br>
+                    강의 안내를 받으실 수 있습니다.
+                </p>
+                <div class="highlight-box mb-6">
+                    <p class="text-yellow-200 text-sm">
+                        ⚠ 카톡방에 입장하지 않으실 경우<br>
+                        특강 안내를 받으실 수 없습니다.
+                    </p>
+                </div>
+                <a href="https://open.kakao.com/o/gSVnuvYg" target="_blank" class="kakao-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3C6.5 3 2 6.58 2 11c0 2.83 1.82 5.32 4.56 6.72-.14.53-.9 3.4-.93 3.63 0 0-.02.17.09.24.11.07.24.03.24.03.31-.04 3.65-2.38 4.22-2.79.59.08 1.2.13 1.82.13 5.5 0 10-3.58 10-8s-4.5-8-10-8z"/>
+                    </svg>
+                    카카오톡 오픈채팅 입장하기
+                </a>
+                <p class="text-gray-500 text-sm mt-6">
+                    오픈채팅방에서 대기해주세요!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section-reveal');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Form submission
+            document.getElementById('applyForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = {
+                    id: Date.now(),
+                    name: this.name.value,
+                    email: this.email.value,
+                    phone: this.phone.value,
+                    job: this.job.value,
+                    concern: this.concern.value,
+                    privacyAgree: this.privacyAgree.checked,
+                    marketingAgree: this.marketingAgree.checked,
+                    submittedAt: new Date().toLocaleString('ko-KR')
+                };
+
+                // Save to localStorage
+                let applications = JSON.parse(localStorage.getItem('texnova_applications') || '[]');
+                applications.push(formData);
+                localStorage.setItem('texnova_applications', JSON.stringify(applications));
+
+                // Close apply modal and show success modal
+                closeModal();
+                document.getElementById('successModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                // Reset form
+                this.reset();
+            });
+        });
+
+        function openModal() {
+            document.getElementById('applyModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('applyModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('applyModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) closeSuccessModal();
+        });
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeSuccessModal();
+            }
+        });
+    </script>
+</body>
+</html>
