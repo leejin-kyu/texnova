@@ -290,14 +290,43 @@
         </div>
     </main>
 
-    <script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, deleteDoc, doc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5CngxINytWmi5b5Kt2VVKb3H4m7wj8cU",
+            authDomain: "texnova-lecture.firebaseapp.com",
+            projectId: "texnova-lecture",
+            storageBucket: "texnova-lecture.firebasestorage.app",
+            messagingSenderId: "636631280840",
+            appId: "1:636631280840:web:6c85f3e39fce0fc55f49fd"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         let applications = [];
 
-        // Load data from localStorage
-        function loadData() {
-            applications = JSON.parse(localStorage.getItem('texnova_applications') || '[]');
-            updateStats();
-            renderTable();
+        // Load data from Firebase
+        async function loadData() {
+            try {
+                const q = query(collection(db, 'applications'), orderBy('submittedAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                applications = [];
+                querySnapshot.forEach((docSnap) => {
+                    applications.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+                updateStats();
+                renderTable();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
         }
 
         // Update statistics
@@ -309,11 +338,11 @@
             document.getElementById('totalCount').textContent = applications.length;
             document.getElementById('marketingCount').textContent = applications.filter(a => a.marketingAgree).length;
             document.getElementById('todayCount').textContent = applications.filter(a => {
-                const date = new Date(a.id);
+                const date = new Date(a.submittedAt);
                 return date.toDateString() === today;
             }).length;
             document.getElementById('weekCount').textContent = applications.filter(a => {
-                const date = new Date(a.id);
+                const date = new Date(a.submittedAt);
                 return date >= weekAgo;
             }).length;
         }
@@ -352,14 +381,22 @@
                     <td class="concern-text" title="${escapeHtml(app.concern || '-')}">${escapeHtml(app.concern || '-')}</td>
                     <td><span class="badge badge-success">동의</span></td>
                     <td><span class="badge ${app.marketingAgree ? 'badge-success' : 'badge-gray'}">${app.marketingAgree ? '동의' : '미동의'}</span></td>
-                    <td>${app.submittedAt}</td>
+                    <td>${app.submittedAtKR || app.submittedAt}</td>
                     <td>
-                        <button class="delete-btn" onclick="deleteApplication(${app.id})" title="삭제">
+                        <button class="delete-btn" data-id="${app.id}" title="삭제">
                             🗑
                         </button>
                     </td>
                 </tr>
             `).join('');
+
+            // Add event listeners for delete buttons
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    deleteApplication(id);
+                });
+            });
         }
 
         // Escape HTML to prevent XSS
@@ -371,28 +408,39 @@
         }
 
         // Delete single application
-        function deleteApplication(id) {
+        async function deleteApplication(id) {
             if (confirm('이 신청 내역을 삭제하시겠습니까?')) {
-                applications = applications.filter(a => a.id !== id);
-                localStorage.setItem('texnova_applications', JSON.stringify(applications));
-                loadData();
+                try {
+                    await deleteDoc(doc(db, 'applications', id));
+                    await loadData();
+                } catch (error) {
+                    console.error('Error deleting:', error);
+                    alert('삭제 중 오류가 발생했습니다.');
+                }
             }
         }
 
         // Delete all applications
-        function confirmDeleteAll() {
+        window.confirmDeleteAll = async function() {
             if (applications.length === 0) {
                 alert('삭제할 데이터가 없습니다.');
                 return;
             }
             if (confirm(`정말 ${applications.length}개의 모든 신청 내역을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
-                localStorage.removeItem('texnova_applications');
-                loadData();
+                try {
+                    for (const app of applications) {
+                        await deleteDoc(doc(db, 'applications', app.id));
+                    }
+                    await loadData();
+                } catch (error) {
+                    console.error('Error deleting all:', error);
+                    alert('삭제 중 오류가 발생했습니다.');
+                }
             }
         }
 
         // Export to Excel (CSV)
-        function exportToExcel() {
+        window.exportToExcel = function() {
             if (applications.length === 0) {
                 alert('다운로드할 데이터가 없습니다.');
                 return;
@@ -409,7 +457,7 @@
                 app.concern || '',
                 app.privacyAgree ? '동의' : '미동의',
                 app.marketingAgree ? '동의' : '미동의',
-                app.submittedAt
+                app.submittedAtKR || app.submittedAt
             ]);
 
             // BOM for Korean characters in Excel

@@ -1496,8 +1496,24 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5CngxINytWmi5b5Kt2VVKb3H4m7wj8cU",
+            authDomain: "texnova-lecture.firebaseapp.com",
+            projectId: "texnova-lecture",
+            storageBucket: "texnova-lecture.firebasestorage.app",
+            messagingSenderId: "636631280840",
+            appId: "1:636631280840:web:6c85f3e39fce0fc55f49fd"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         document.addEventListener('DOMContentLoaded', function() {
             const sections = document.querySelectorAll('.section-reveal');
 
@@ -1517,11 +1533,14 @@
             });
 
             // Form submission
-            document.getElementById('applyForm').addEventListener('submit', function(e) {
+            document.getElementById('applyForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
+                const submitBtn = this.querySelector('.form-submit');
+                submitBtn.disabled = true;
+                submitBtn.textContent = '신청 중...';
+
                 const formData = {
-                    id: Date.now(),
                     name: this.name.value,
                     email: this.email.value,
                     phone: this.phone.value,
@@ -1529,53 +1548,61 @@
                     concern: this.concern.value,
                     privacyAgree: this.privacyAgree.checked,
                     marketingAgree: this.marketingAgree.checked,
-                    submittedAt: new Date().toLocaleString('ko-KR')
+                    submittedAt: new Date().toISOString(),
+                    submittedAtKR: new Date().toLocaleString('ko-KR')
                 };
 
-                // Save to localStorage
-                let applications = JSON.parse(localStorage.getItem('texnova_applications') || '[]');
-                applications.push(formData);
-                localStorage.setItem('texnova_applications', JSON.stringify(applications));
+                try {
+                    // Save to Firebase Firestore
+                    await addDoc(collection(db, 'applications'), formData);
 
-                // Close apply modal and show success modal
-                closeModal();
-                document.getElementById('successModal').classList.add('active');
-                document.body.style.overflow = 'hidden';
+                    // Close apply modal and show success modal
+                    closeModal();
+                    document.getElementById('successModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
 
-                // Reset form
-                this.reset();
+                    // Reset form
+                    this.reset();
+                } catch (error) {
+                    console.error('Error saving application:', error);
+                    alert('신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '신청하기';
+                }
             });
         });
 
-        function openModal() {
+        // Modal functions - attach to window for onclick access
+        window.openModal = function() {
             document.getElementById('applyModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('applyModal').classList.remove('active');
             document.body.style.overflow = '';
         }
 
-        function closeSuccessModal() {
+        window.closeSuccessModal = function() {
             document.getElementById('successModal').classList.remove('active');
             document.body.style.overflow = '';
         }
 
         // Close modal on overlay click
         document.getElementById('applyModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+            if (e.target === this) window.closeModal();
         });
 
         document.getElementById('successModal').addEventListener('click', function(e) {
-            if (e.target === this) closeSuccessModal();
+            if (e.target === this) window.closeSuccessModal();
         });
 
         // Close modal on ESC key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closeModal();
-                closeSuccessModal();
+                window.closeModal();
+                window.closeSuccessModal();
             }
         });
     </script>
