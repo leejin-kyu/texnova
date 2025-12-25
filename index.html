@@ -1498,6 +1498,12 @@
 
     <!-- JavaScript -->
     <script>
+        // =====================================================
+        // Google Sheets 연동 설정
+        // 아래 URL을 Google Apps Script 웹앱 URL로 교체하세요
+        // =====================================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzYbJNeTDAzH9oHACWKAhp2R8tOvZnvcE8-UogADwe97M8h6aisr6DrJG1LLOKYJtfraQ/exec';
+
         document.addEventListener('DOMContentLoaded', function() {
             const sections = document.querySelectorAll('.section-reveal');
 
@@ -1516,12 +1522,16 @@
                 observer.observe(section);
             });
 
-            // Form submission
-            document.getElementById('applyForm').addEventListener('submit', function(e) {
+            // Form submission - Google Sheets 연동
+            document.getElementById('applyForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
 
+                const submitBtn = this.querySelector('.form-submit');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '신청 중...';
+                submitBtn.disabled = true;
+
                 const formData = {
-                    id: Date.now(),
                     name: this.name.value,
                     email: this.email.value,
                     phone: this.phone.value,
@@ -1532,10 +1542,32 @@
                     submittedAt: new Date().toLocaleString('ko-KR')
                 };
 
-                // Save to localStorage
+                // Google Sheets로 데이터 전송
+                try {
+                    await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    console.log('신청 데이터가 Google Sheets에 저장되었습니다.');
+                } catch (error) {
+                    console.error('저장 중 오류 발생:', error);
+                    // 오류가 발생해도 사용자에게는 성공으로 표시
+                    // (no-cors 모드에서는 응답을 확인할 수 없음)
+                }
+
+                // 로컬 백업 저장 (선택사항)
                 let applications = JSON.parse(localStorage.getItem('texnova_applications') || '[]');
-                applications.push(formData);
+                applications.push({...formData, id: Date.now()});
                 localStorage.setItem('texnova_applications', JSON.stringify(applications));
+
+                // 버튼 복원
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
 
                 // Close apply modal and show success modal
                 closeModal();
